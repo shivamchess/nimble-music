@@ -37,3 +37,6 @@ android/local.properties
 android/**/GeneratedPluginRegistrant.java
 android/app/build/
 *.keystore
+*.zip
+build_output/
+

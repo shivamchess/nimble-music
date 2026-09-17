@@ -57,25 +57,15 @@ jobs:
           path: build/app/outputs/flutter-apk/app-release.apk
 
       - name: Create GitHub Release
-        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || github.event_name == 'workflow_dispatch'
+        if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
+        continue-on-error: true
         with:
-          tag_name: v1.0.0
-          name: Nimble Music v1.0.0 (Release)
-          body: |
-            ### ✨ Nimble Music v1.0.0
-            
-            Welcome to the initial release of **Nimble** — an ultra-clean, zen-inspired native music player and downloader with real-time synchronized karaoke lyrics.
-            
-            #### 📱 What's Inside:
-            - **Nimble Light Zen Design**: Soft paper-white canvas, clean cards, deep charcoal controls.
-            - **Industrial Native Audio Engine**: Lockscreen controls, MediaSession notification, and auto-pause on headphone disconnect.
-            - **Offline SQLite Vault**: Instant 0ms startup time, embedded ID3 and .lrc lyrics support.
-            - **Standalone Streaming**: Works 100% on device with or without desktop server.
-            - **Multi-Theme Engine**: Nimble Light, Obsidian Dark, and Warm Dusk.
-            
-            #### 📥 Installation:
-            Download and install `app-release.apk` below on any Android 8.0+ device!
+          name: Nimble Music ${{ github.ref_name }}
+          draft: false
+          prerelease: false
+          generate_release_notes: true
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
