@@ -36,13 +36,6 @@ jobs:
           channel: 'stable'
           cache: true
 
-      - name: Generate version-matched Android native layer
-        run: |
-          flutter create --platforms=android --org=com.nimble.music .
-          # Preserve custom AudioService manifest and Activity
-          git checkout android/app/src/main/AndroidManifest.xml || true
-          git checkout android/app/src/main/kotlin/com/nimble/music/MainActivity.kt || true
-
       - name: Install Dependencies
         run: flutter pub get
 
