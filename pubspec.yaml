@@ -1,0 +1,44 @@
+name: nimble_music
+description: "Nimble — World-class native music player and downloader with offline synced lyrics."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State Management & Architecture
+  provider: ^6.1.2
+
+  # Industrial Native Audio Engine
+  just_audio: ^0.9.36
+  audio_service: ^0.18.12
+  audio_session: ^0.1.18
+
+  # High-Performance Local Database
+  sqflite: ^2.3.2
+  path: ^1.9.0
+
+  # File System, Permissions & Storage
+  path_provider: ^2.1.2
+  permission_handler: ^11.3.1
+  shared_preferences: ^2.2.2
+
+  # Networking & Media
+  http: ^1.2.0
+  cached_network_image: ^3.3.1
+  google_fonts: ^6.1.0
+
+  # Visuals & Micro-interactions
+  cupertino_icons: ^1.0.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true

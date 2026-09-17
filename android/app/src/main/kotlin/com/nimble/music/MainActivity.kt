@@ -1,0 +1,6 @@
+package com.nimble.music
+
+import com.ryanheise.audioservice.AudioServiceActivity
+
+class MainActivity: AudioServiceActivity() {
+}

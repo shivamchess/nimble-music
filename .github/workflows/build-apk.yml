@@ -1,0 +1,80 @@
+name: Build Nimble APK
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build Android Release APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Cache Pub Dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.pub-cache
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.yaml') }}
+          restore-keys: ${{ runner.os }}-pub-
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Build Release APK
+        run: flutter build apk --release
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Nimble-Music-v1.0.0-Release-APK
+          path: build/app/outputs/flutter-apk/app-release.apk
+
+      - name: Create GitHub Release
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || github.event_name == 'workflow_dispatch'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.0.0
+          name: Nimble Music v1.0.0 (Release)
+          body: |
+            ### ✨ Nimble Music v1.0.0
+            
+            Welcome to the initial release of **Nimble** — an ultra-clean, zen-inspired native music player and downloader with real-time synchronized karaoke lyrics.
+            
+            #### 📱 What's Inside:
+            - **Nimble Light Zen Design**: Soft paper-white canvas, clean cards, deep charcoal controls.
+            - **Industrial Native Audio Engine**: Lockscreen controls, MediaSession notification, and auto-pause on headphone disconnect.
+            - **Offline SQLite Vault**: Instant 0ms startup time, embedded ID3 and .lrc lyrics support.
+            - **Standalone Streaming**: Works 100% on device with or without desktop server.
+            - **Multi-Theme Engine**: Nimble Light, Obsidian Dark, and Warm Dusk.
+            
+            #### 📥 Installation:
+            Download and install `app-release.apk` below on any Android 8.0+ device!
+          files: build/app/outputs/flutter-apk/app-release.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
