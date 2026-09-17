@@ -84,7 +84,7 @@ class PlaylistDetailScreen extends StatelessWidget {
             const SizedBox(height: 24),
             ListView.builder(
               shrinkWrap: true,
-              physics: const NeverScrollableScrollException(),
+              physics: const NeverScrollableScrollPhysics(),
               padding: const EdgeInsets.symmetric(horizontal: 16),
               itemCount: library.songs.length,
               itemBuilder: (context, index) {
