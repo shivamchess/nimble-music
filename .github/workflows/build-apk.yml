@@ -34,7 +34,15 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
+          flutter-version: '3.27.4'
           cache: true
+
+      - name: Generate Android Gradle Wrapper & Platform
+        run: |
+          flutter create --project-name nimble_music --org com.nimble --platforms android .
+          # Restore our custom production manifest and MainActivity
+          git checkout android/app/src/main/AndroidManifest.xml || true
+          git checkout android/app/src/main/kotlin/com/nimble/music/MainActivity.kt || true
 
       - name: Install Dependencies
         run: flutter pub get
